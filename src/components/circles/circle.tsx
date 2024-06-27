@@ -12,20 +12,24 @@ export const Circle = ({ x, y, text }: CircleProps) => {
     <BasicCircle
       animate={{
         scale: [0.5, 0.5, 3],
-        opacity: [1, 0.5, 0],
         backgroundColor: [
-          "rgba(255, 255, 255, 1)",
+          "rgba(255, 255, 255, 0.3)",
           "rgba(255, 255, 255, 0)",
           "rgba(255, 255, 255, 0)",
         ],
+        borderColor: [
+          "rgba(255, 255, 255, 1)",
+          "rgba(255, 255, 255, 0.5)",
+          "rgba(255, 255, 255, 0)",
+        ],
       }}
-      transition={{ duration: 1 }}
+      transition={{ duration: 1, times: [0, 0.1, 1] }}
       x={x}
       y={y}
     >
       <Text
         animate={{
-          opacity: [1, 2, 2],
+          opacity: [1, 1, 0.5],
         }}
       >
         {text}

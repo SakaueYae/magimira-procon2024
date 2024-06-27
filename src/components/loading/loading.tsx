@@ -5,9 +5,10 @@ import styled from "styled-components";
 
 type LoadingProps = {
   isLoading: boolean;
+  onClick: () => void;
 };
 
-export const Loading = ({ isLoading }: LoadingProps) => {
+export const Loading = ({ isLoading, onClick }: LoadingProps) => {
   const ref = useRef<HTMLDivElement>(null);
   const [currentInterval, setCurrentInterval] = useState<number>(0);
   const basicCircleVariant = {
@@ -55,8 +56,6 @@ export const Loading = ({ isLoading }: LoadingProps) => {
     }
   }, [isLoading]);
 
-  console.log(ref.current?.clientHeight);
-
   /**
    * durationで指定した秒数でopacityが0.3→1と繰り返す
    * ロード中：真ん中の丸から1秒おきに波紋が広がるアニメーション、5秒後に消える
@@ -75,6 +74,8 @@ export const Loading = ({ isLoading }: LoadingProps) => {
           repeat: Infinity,
         }}
         variants={basicCircleVariant}
+        onClick={onClick}
+        isLoading={isLoading}
       >
         <CircleContainer ref={ref}></CircleContainer>
         <Text>{isLoading ? "Loading..." : "Play"}</Text>
@@ -99,7 +100,7 @@ const Text = styled(motion.p)`
   margin: 0;
 `;
 
-const BaseCircle = styled(motion.div)`
+const BaseCircle = styled(motion.div)<{ isLoading: boolean }>`
   width: 300px;
   height: 300px;
   border-radius: 50%;
@@ -108,6 +109,7 @@ const BaseCircle = styled(motion.div)`
   justify-content: center;
   align-items: center;
   position: relative;
+  cursor: ${(props) => (props.isLoading ? "default" : "pointer")};
 
   @media only screen and (max-width: 767px) {
     width: 150px;

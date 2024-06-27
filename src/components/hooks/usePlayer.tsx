@@ -1,6 +1,9 @@
 import { useEffect, useMemo, useState } from "react";
 import { Player } from "textalive-app-api";
 
+/**
+ * このままだと呼び出されるごとにPlayerが生成されてしまうので、修正する必要あり
+ */
 export const usePlayer = () => {
   const [mediaElement, setMediaElement] = useState<HTMLDivElement | null>();
   const [player, setPlayer] = useState<Player>();
