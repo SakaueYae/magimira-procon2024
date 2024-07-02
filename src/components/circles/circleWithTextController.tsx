@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { createRoot } from "react-dom/client";
-import { Circle } from "./circle";
+import { CircleWithText } from "./circleWithText";
 
 type CircleWithTextControllerProps = {
   text: string;
@@ -35,8 +35,8 @@ export const CircleWithTextController = ({
   useEffect(() => {
     window.addEventListener("mousemove", (e) => {
       setPosition({
-        x: e.clientX - 50, // 動的に変わらないので注意
-        y: e.clientY - 50,
+        x: e.clientX, // 動的に変わらないので注意
+        y: e.clientY,
       });
     });
   }, []);
@@ -83,7 +83,7 @@ export const CircleWithTextController = ({
     ref.current.appendChild(circle);
     const root = createRoot(circle);
 
-    root.render(<Circle x={position.x} y={position.y} text={text} />);
+    root.render(<CircleWithText x={position.x} y={position.y} text={text} />);
 
     setTimeout(() => {
       circle.remove();
