@@ -1,56 +1,47 @@
 import styled from "styled-components";
 import { BasicCircle } from "./basicCircle";
+import { Ref } from "react";
 
 type CircleProps = {
   x: number;
   y: number;
   color?: string;
   isChorus?: boolean;
+  ref?: Ref<HTMLDivElement>;
 };
 
-export const Circle = ({ x, y, color, isChorus }: CircleProps) => {
-  const borderColor = color
-    ? [color, color.slice(0, -2) + "0)", color.slice(0, -2) + "0)"]
-    : [
-        "rgba(255, 255, 255, 1)",
-        "rgba(255, 255, 255, 0)",
-        "rgba(255, 255, 255, 0)",
-      ];
-
+export const Circle = ({ x, y, color, isChorus, ref }: CircleProps) => {
   return (
-    <Container x={x} y={y}>
+    <Container x={x} y={y} ref={ref}>
       <BasicCircle
+        initial={{ scale: 0.5, borderColor: color ?? "rgba(255, 255, 255, 1)" }}
         animate={{
-          scale: !isChorus ? [0.5, 3, 3] : [0.5, 5, 5],
-          borderColor,
+          scale: !isChorus ? 3 : 5,
+          borderColor: color
+            ? color.slice(0, -2) + "0)"
+            : "rgba(255, 255, 255, 0)",
         }}
-        transition={{ duration: 4, times: [0, 0.25, 1] }}
+        transition={{ duration: 1 }}
         color={color}
       />
+      {isChorus && (
+        <BasicCircle
+          initial={{
+            scale: 0.5,
+            borderColor: color ?? "rgba(255, 255, 255, 1)",
+          }}
+          animate={{
+            scale: 5,
+            borderColor: color
+              ? color.slice(0, -2) + "0)"
+              : "rgba(255, 255, 255, 0)",
+          }}
+          transition={{ duration: 1, delay: 0.1 }}
+          color={color}
+        />
+      )}
     </Container>
   );
-  {
-    /* <BasicCircle
-      animate={{
-        scale: [0.5, 3, 3],
-        borderColor,
-      }}
-      transition={{ duration: 4, times: [0, 0.25, 1] }}
-      x={x}
-      y={y}
-      color={color}
-    >
-      <Text
-        animate={{
-          opacity: [1, 1, 0],
-          filter: ["blur(0px)", "blur(0px)", "blur(10px)"],
-        }}
-        transition={{ duration: 4, times: [0, 0.25, 1] }}
-      >
-        {text}
-      </Text>
-    </BasicCircle> */
-  }
 };
 
 const Container = styled.div<{

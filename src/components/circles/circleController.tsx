@@ -1,6 +1,7 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useContext } from "react";
 import { Circle } from "./circle";
 import { createRoot } from "react-dom/client";
+import { CirclesContext } from "../../context/circlesContext";
 
 type CircleControllerProps = {
   beat: number;
@@ -9,18 +10,10 @@ type CircleControllerProps = {
 
 export const CircleController = ({ beat, isChorus }: CircleControllerProps) => {
   const ref = useRef<HTMLDivElement>(null);
-  const [circleData, setCircleData] = useState<{
-    x: number;
-    y: number;
-    color: string;
-  }>({
-    x: 0,
-    y: 0,
-    color: "",
-  });
+  const { circles } = useContext(CirclesContext);
 
   useEffect(() => {
-    if (beat && beat > 0.8 && ref.current) {
+    if (beat && beat > 0.7 && ref.current) {
       const circle = document.createElement("div");
       ref.current.appendChild(circle);
       const root = createRoot(circle);
@@ -31,11 +24,18 @@ export const CircleController = ({ beat, isChorus }: CircleControllerProps) => {
         Math.random() * 255
       )}, ${Math.floor(Math.random() * 255)}, 1)`;
 
-      root.render(<Circle x={x} y={y} color={color} isChorus={isChorus} />);
+      const circleRef = { current: circle };
+
+      root.render(
+        <Circle x={x} y={y} color={color} isChorus={isChorus} ref={circleRef} />
+      );
+
+      circles.push(circleRef);
 
       setTimeout(() => {
         circle.remove();
-      }, 5000);
+        circles.shift();
+      }, 1100);
     }
   }, [beat]);
 

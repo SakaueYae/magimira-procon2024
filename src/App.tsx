@@ -9,15 +9,17 @@ import { usePlayer } from "./components/hooks/usePlayer";
 import { Loading } from "./components/loading/loading";
 import { SeekBar } from "./components/seekBar/seekBar";
 import { PlayAndStopButton } from "./components/playAndStopButton/playAndStopButton";
+import { AnimatePresence } from "framer-motion";
+import { CirclesContextProvider } from "./context/circlesContext";
 
 /**
  * やりたいこと
- * ・サビの特殊アニメーション
  * ・サイドバー実装
  * ・クリック（ドラッグ）した際のアニメーション
  * ・要素の重なりによる色の変化
  * ・文字が溶けるエフェクトその2
  * ・duration操作
+ * ・曲選択
  */
 
 function App() {
@@ -37,6 +39,7 @@ function App() {
 
     const listener = {
       onTimeUpdate: (position: number) => {
+        if (position === 0) setPhrase("");
         setPosition(Math.trunc((position * 1000) / player.video.duration) / 10);
         const nowBeat = player.findBeat(position);
         if (!nowBeat) return;
@@ -88,38 +91,43 @@ function App() {
     >
       {media}
       {/* <Circle x={100} y={100} text="test" /> */}
-      {isClicked ? (
-        <>
-          <CircleController beat={beat ?? 0} isChorus={isChorus} />
-          {/**
-           * @todo
-           * 1. 前のtextと同じphraseでない場合に座標を保持
-           * 2. 前のtextと比較して同じphraseの場合、前の要素の付近に配置
-           */}
-          <CircleWithTextController text={text} phrase={phrase} />
-          <SeekBar position={position} onClick={seekBarOnClick} />
-          <PlayAndStopButton
+      <AnimatePresence mode="wait">
+        {isClicked ? (
+          <>
+            <CirclesContextProvider>
+              <CircleController beat={beat ?? 0} isChorus={isChorus} />
+              {/**
+               * @todo
+               * 1. 前のtextと同じphraseでない場合に座標を保持
+               * 2. 前のtextと比較して同じphraseの場合、前の要素の付近に配置
+               */}
+              <CircleWithTextController text={text} phrase={phrase} />
+            </CirclesContextProvider>
+            <SeekBar position={position} onClick={seekBarOnClick} />
+            <PlayAndStopButton
+              onClick={() => {
+                if (isPlaying) {
+                  player?.requestPause();
+                  setIsPlaying(!isPlaying);
+                } else {
+                  player?.requestPlay();
+                  setIsPlaying(!isPlaying);
+                }
+              }}
+            />
+          </>
+        ) : (
+          <Loading
+            isLoading={!player || !loaded}
             onClick={() => {
-              if (isPlaying) {
-                player?.requestPause();
-                setIsPlaying(!isPlaying);
-              } else {
-                player?.requestPlay();
-                setIsPlaying(!isPlaying);
-              }
+              setIsClicked(true);
+              player?.requestPlay();
+              setIsPlaying(!isPlaying);
             }}
+            key="loadingScreen"
           />
-        </>
-      ) : (
-        <Loading
-          isLoading={!player || !loaded}
-          onClick={() => {
-            setIsClicked(true);
-            player?.requestPlay();
-            setIsPlaying(!isPlaying);
-          }}
-        />
-      )}
+        )}
+      </AnimatePresence>
     </Container>
   );
 }

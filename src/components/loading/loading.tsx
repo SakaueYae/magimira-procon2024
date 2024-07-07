@@ -1,4 +1,4 @@
-import { motion } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
 import { useEffect, useRef, useState } from "react";
 import { createRoot } from "react-dom/client";
 import styled from "styled-components";
@@ -18,6 +18,18 @@ export const Loading = ({ isLoading, onClick }: LoadingProps) => {
         "rgba(255, 255, 255, 0)",
         "rgba(255, 255, 255, 1)",
       ],
+      transition: {
+        duration: 2,
+        repeat: Infinity,
+      },
+    },
+    clicked: {
+      scale: 1.5,
+      opacity: 0,
+      filter: "blur(10px)",
+      transition: {
+        duration: 1,
+      },
     },
   };
   const circleVariant = {
@@ -66,19 +78,35 @@ export const Loading = ({ isLoading, onClick }: LoadingProps) => {
     <Container>
       <BaseCircle
         animate="loading"
-        // {{
-        //   opacity: [1, 0, 1],
-        // }}
-        transition={{
-          duration: 2,
-          repeat: Infinity,
-        }}
         variants={basicCircleVariant}
         onClick={onClick}
         isLoading={isLoading}
+        exit={"clicked"}
       >
         <CircleContainer ref={ref}></CircleContainer>
-        <Text>{isLoading ? "Loading..." : "Play"}</Text>
+        <AnimatePresence mode="wait">
+          {isLoading ? (
+            <Text
+              initial={{ opacity: 0, filter: "blur(10px)" }}
+              animate={{ opacity: 1, filter: "blur(0px)" }}
+              exit={{ opacity: 0, filter: "blur(10px)" }}
+              transition={{ duration: 0.5 }}
+              key="loading"
+            >
+              Loading
+            </Text>
+          ) : (
+            <Text
+              initial={{ opacity: 0, filter: "blur(10px)" }}
+              animate={{ opacity: 1, filter: "blur(0px)" }}
+              exit={{ opacity: 0, filter: "blur(10px)" }}
+              transition={{ duration: 0.5 }}
+              key="loaded"
+            >
+              Play
+            </Text>
+          )}
+        </AnimatePresence>
       </BaseCircle>
     </Container>
   );
