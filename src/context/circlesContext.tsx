@@ -1,11 +1,11 @@
-import { createContext, ReactNode, Ref, useRef } from "react";
+import { createContext, ReactNode, useRef } from "react";
 
 type CirclesContextProviderProps = {
   children: ReactNode;
 };
 
 type CirclesContextType = {
-  circles: Ref<HTMLElement>[];
+  circles: HTMLElement[];
 };
 
 export const CirclesContext = createContext({} as CirclesContextType);
@@ -13,7 +13,7 @@ export const CirclesContext = createContext({} as CirclesContextType);
 export const CirclesContextProvider = ({
   children,
 }: CirclesContextProviderProps) => {
-  const circles = useRef<Ref<HTMLElement>[]>([]).current;
+  const circles = useRef<HTMLElement[]>([]).current;
   return (
     <CirclesContext.Provider value={{ circles }}>
       {children}

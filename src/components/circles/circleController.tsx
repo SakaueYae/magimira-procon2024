@@ -24,13 +24,9 @@ export const CircleController = ({ beat, isChorus }: CircleControllerProps) => {
         Math.random() * 255
       )}, ${Math.floor(Math.random() * 255)}, 1)`;
 
-      const circleRef = { current: circle };
+      root.render(<Circle x={x} y={y} color={color} isChorus={isChorus} />);
 
-      root.render(
-        <Circle x={x} y={y} color={color} isChorus={isChorus} ref={circleRef} />
-      );
-
-      circles.push(circleRef);
+      circles.push(circle);
 
       setTimeout(() => {
         circle.remove();

@@ -10,7 +10,7 @@ type CircleWithTextProps = {
   color?: string;
   isChorus?: boolean;
   isMouseDown?: boolean;
-  circles?: Ref<HTMLElement>[];
+  circles?: HTMLElement[];
 };
 
 /**
@@ -31,50 +31,6 @@ export const CircleWithText = ({
   const [borderColor, setBorderColor] = useState<string[]>([]);
   const ref = useRef<HTMLDivElement>(null);
   const controls = useAnimation();
-  // const { circles } = useContext(CirclesContext); // なぜかすべてundefinedになる
-
-  /** IntersectionObserverでの処理 */
-  // useEffect(() => {
-  //   if (ref.current) {
-  //     const observer = new IntersectionObserver(
-  //       (entries) => {
-  //         entries.forEach((entry) => {
-  //           if (entry.isIntersecting) {
-  //             const color = entry.target.children[0].children[0]
-  //               .computedStyleMap()
-  //               .get("border-color")
-  //               ?.toString();
-
-  //             if (color) {
-  //               if (color.includes("rgba")) {
-  //                 const splitColor = color.split(" ");
-  //                 const borderColorWithoutOpacity =
-  //                   splitColor[0] + " " + splitColor[1] + " " + splitColor[2];
-  //                 controls.start({
-  //                   borderColor: borderColorWithoutOpacity + " 1)",
-  //                   color: borderColorWithoutOpacity + " 1)",
-  //                 });
-  //               } else {
-  //                 controls.start({ borderColor: color, color: color });
-  //               }
-  //             }
-  //           }
-  //         });
-  //       }
-  //       // { root: ref.current }
-  //     );
-
-  //     for (const circle of circles) {
-  //       observer.observe(circle);
-  //     }
-
-  //     return () => {
-  //       for (const circle of circles) {
-  //         observer.unobserve(circle);
-  //       }
-  //     };
-  //   }
-  // }, [circles, controls]);
 
   /** ResizeObserverでの処理、半径の和で計算 */
   useEffect(() => {
@@ -82,20 +38,18 @@ export const CircleWithText = ({
     const observer = new ResizeObserver(() => {
       for (const circle of circles) {
         if (circle) {
-          const circleX = circle.current.children[0].getAttribute("x");
-          const circleY = circle.current.children[0].getAttribute("y");
+          const circleX = circle.children[0].getAttribute("x");
+          const circleY = circle.children[0].getAttribute("y");
           const d = distance2D(
             { x, y },
             { x: Number(circleX), y: Number(circleY) }
           );
           const r = ref.current?.offsetHeight ?? 0 / 2;
-          // const circleR = circle.current.offsetHeight / 2;
           if (d < r + 250) {
             // 固定長
-            console.log("hit");
-            console.log(d, r, circle.current.offsetHeight, circle);
-            const color =
-              circle.current.children[0].children[0].getAttribute("color");
+            // console.log("hit");
+            // console.log(d, r, circle.offsetHeight, circle);
+            const color = circle.children[0].children[0].getAttribute("color");
 
             if (color) {
               if (color.includes("rgba")) {
@@ -168,49 +122,8 @@ export const CircleWithText = ({
     }
   }, [color]);
 
-  // const checkIntersection = () => {
-  //   for (const circle of circles) {
-  //     if (circle) {
-  //       const circleX = circle.current.children[0].getAttribute("x");
-  //       const circleY = circle.current.children[0].getAttribute("y");
-  //       const d = distance2D(
-  //         { x, y },
-  //         { x: Number(circleX), y: Number(circleY) }
-  //       );
-  //       const r = ref.current?.offsetHeight ?? 0 / 2;
-  //       const circleR = circle.current.offsetHeight / 2;
-  //       console.log(circle.current.children[0].getBoundingClientRect(), circle);
-  //       if (d < r + circleR) {
-  //         console.log("hit");
-  //         console.log(d, r, circle.current.offsetHeight, circle);
-  //         const color =
-  //           circle.current.children[0].children[0].getAttribute("color");
-
-  //         if (color) {
-  //           if (color.includes("rgba")) {
-  //             const splitColor = color.split(" ");
-  //             const borderColorWithoutOpacity =
-  //               splitColor[0] + " " + splitColor[1] + " " + splitColor[2];
-  //             controls.start({
-  //               borderColor: borderColorWithoutOpacity + " 1)",
-  //               color: borderColorWithoutOpacity + " 1)",
-  //             });
-  //           } else {
-  //             controls.start({ borderColor: color, color: color });
-  //           }
-  //         }
-  //       }
-  //     }
-  //   }
-  // };
-
   useEffect(() => {
     controls.start("created");
-    // const timeout = setTimeout(checkIntersection, 100);
-
-    // return () => {
-    //   clearTimeout(timeout);
-    // };
   }, []);
 
   return (
