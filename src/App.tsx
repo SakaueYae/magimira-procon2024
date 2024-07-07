@@ -1,8 +1,5 @@
-import { useEffect, useMemo, useState, useRef, SetStateAction } from "react";
-import { IPlayerApp, Player } from "textalive-app-api";
-import { Circle } from "./components/circles/circle";
+import { useEffect, useState } from "react";
 import styled from "styled-components";
-import { createRoot } from "react-dom/client";
 import { CircleController } from "./components/circles/circleController";
 import { CircleWithTextController } from "./components/circles/circleWithTextController";
 import { usePlayer } from "./components/hooks/usePlayer";

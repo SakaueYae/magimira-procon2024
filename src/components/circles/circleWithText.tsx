@@ -1,7 +1,7 @@
 import styled from "styled-components";
-import { distance, distance2D, motion, useAnimation } from "framer-motion";
+import { distance2D, motion, useAnimation } from "framer-motion";
 import { BasicCircle } from "./basicCircle";
-import { useEffect, useRef, useState, Ref } from "react";
+import { useEffect, useRef, useState } from "react";
 
 type CircleWithTextProps = {
   x: number;
