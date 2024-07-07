@@ -1,6 +1,6 @@
 import { useContext, useEffect, useRef, useState } from "react";
 import { createRoot } from "react-dom/client";
-import { CircleWithText } from "./circleWithText";
+import { CircleWithText } from "./CircleWithText";
 import { CirclesContext } from "../../context/circlesContext";
 
 type CircleWithTextControllerProps = {

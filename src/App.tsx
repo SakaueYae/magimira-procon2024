@@ -1,11 +1,11 @@
 import { useEffect, useState } from "react";
 import styled from "styled-components";
-import { CircleController } from "./components/circles/circleController";
-import { CircleWithTextController } from "./components/circles/circleWithTextController";
+import { CircleController } from "./components/circles/CircleController";
+import { CircleWithTextController } from "./components/circles/CircleWithTextController";
 import { usePlayer } from "./components/hooks/usePlayer";
-import { Loading } from "./components/loading/loading";
-import { SeekBar } from "./components/seekBar/seekBar";
-import { PlayAndStopButton } from "./components/playAndStopButton/playAndStopButton";
+import { Loading } from "./components/loading/Loading";
+import { SeekBar } from "./components/seekBar/SeekBar";
+import { PlayAndStopButton } from "./components/playAndStopButton/PlayAndStopButton";
 import { AnimatePresence } from "framer-motion";
 import { CirclesContextProvider } from "./context/circlesContext";
 
