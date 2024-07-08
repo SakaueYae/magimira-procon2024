@@ -13,12 +13,6 @@ type CircleWithTextProps = {
   circles?: HTMLElement[];
 };
 
-/**
- * それぞれのCircleWithTextに対して、以下の処理を行う形式がよさそう？
- * 1. 生成されたCircleWithTextのrefをuseInViewのrootとする
- * 2. 何らかの方法で今生成されているCircleを取得、これらを監視対象とする
- * 3. CircleWithTextにCircleが重なったときに、重なったCircleを取得してその色を反映する
- */
 export const CircleWithText = ({
   x,
   y,
@@ -44,11 +38,7 @@ export const CircleWithText = ({
             { x, y },
             { x: Number(circleX), y: Number(circleY) }
           );
-          const r = ref.current?.offsetHeight ?? 0 / 2;
           if ((isChorus && d < 150 + 250) || (!isChorus && d < 150 + 150)) {
-            // 固定長
-            // console.log("hit");
-            // console.log(d, r, circle.offsetHeight, circle);
             const color = circle.children[0].children[0].getAttribute("color");
 
             if (color) {

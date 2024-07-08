@@ -8,6 +8,7 @@ import { SeekBar } from "./components/seekBar/seekBar";
 import { PlayAndStopButton } from "./components/playAndStopButton/playAndStopButton";
 import { AnimatePresence } from "framer-motion";
 import { CirclesContextProvider } from "./context/circlesContext";
+import { selectMusic } from "./components/hooks/selectMusic";
 
 /**
  * やりたいこと
@@ -67,32 +68,18 @@ function App() {
     };
   }, [player]);
 
-  const handleClick = () => {
-    setBeat(90);
-  };
-
   const seekBarOnClick = (newPosition: number) => {
     player?.requestMediaSeek(newPosition * player.video.duration);
   };
 
   return (
-    <Container
-      onClick={() => {
-        if (isClicked) handleClick();
-      }}
-    >
+    <Container>
       {media}
-      {/* <Circle x={100} y={100} text="test" /> */}
       <AnimatePresence mode="wait">
         {isClicked ? (
           <>
             <CirclesContextProvider>
               <CircleController beat={beat ?? 0} isChorus={isChorus} />
-              {/**
-               * @todo
-               * 1. 前のtextと同じphraseでない場合に座標を保持
-               * 2. 前のtextと比較して同じphraseの場合、前の要素の付近に配置
-               */}
               <CircleWithTextController text={text} isChorus={isChorus} />
             </CirclesContextProvider>
             <SeekBar position={position} onClick={seekBarOnClick} />
@@ -117,6 +104,9 @@ function App() {
               setIsPlaying(!isPlaying);
             }}
             key="loadingScreen"
+            onMusicClick={(music) => {
+              if (player) selectMusic(player, music);
+            }}
           />
         )}
       </AnimatePresence>

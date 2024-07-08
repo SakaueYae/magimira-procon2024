@@ -18,7 +18,6 @@ export const PlayAndStopButton = ({ onClick }: PlayAndStopButtonProps) => {
   const variants = {
     play: {
       clipPath: "polygon(0 0, 100% 0, 100% 100%, 0 100%)",
-      // rotate: 180,
     },
     stop: {
       clipPath: "polygon(0 0, 100% 50%, 0 100%, 0 100%)",

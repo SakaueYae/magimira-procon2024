@@ -1,4 +1,5 @@
-import { useRef } from "react";
+import { motion, useAnimation } from "framer-motion";
+import { useEffect, useRef } from "react";
 import styled from "styled-components";
 
 type SeekBarProps = {
@@ -8,6 +9,7 @@ type SeekBarProps = {
 
 export const SeekBar = ({ position, onClick }: SeekBarProps) => {
   const ref = useRef<HTMLDivElement>(null);
+  const controls = useAnimation();
 
   const handleClick = (e: React.MouseEvent<HTMLDivElement>) => {
     const x = e.clientX;
@@ -16,9 +18,15 @@ export const SeekBar = ({ position, onClick }: SeekBarProps) => {
     onClick(newPosition);
   };
 
+  useEffect(() => {
+    controls.start({
+      width: `${position}%`,
+    });
+  }, [controls, position]);
+
   return (
     <Container onClick={handleClick} ref={ref}>
-      <Bar position={position} />
+      <Bar initial={{ width: "0px" }} animate={controls} />
     </Container>
   );
 };
@@ -32,8 +40,7 @@ const Container = styled.div`
   cursor: pointer;
 `;
 
-const Bar = styled.div<{ position: number }>`
-  width: ${(props) => props.position}%;
+const Bar = styled(motion.div)`
   height: 100%;
   background-color: white;
 `;
