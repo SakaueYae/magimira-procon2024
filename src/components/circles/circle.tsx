@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { BasicCircle } from "./BasicCircle";
+import { BasicCircle } from "./basicCircle";
 import { Ref } from "react";
 
 type CircleProps = {

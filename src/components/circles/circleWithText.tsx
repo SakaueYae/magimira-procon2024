@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import { distance2D, motion, useAnimation } from "framer-motion";
-import { BasicCircle } from "./BasicCircle";
+import { BasicCircle } from "./basicCircle";
 import { useEffect, useRef, useState } from "react";
 
 type CircleWithTextProps = {
@@ -45,7 +45,7 @@ export const CircleWithText = ({
             { x: Number(circleX), y: Number(circleY) }
           );
           const r = ref.current?.offsetHeight ?? 0 / 2;
-          if (d < r + 250) {
+          if ((isChorus && d < 150 + 250) || (!isChorus && d < 150 + 150)) {
             // 固定長
             // console.log("hit");
             // console.log(d, r, circle.offsetHeight, circle);
@@ -78,7 +78,7 @@ export const CircleWithText = ({
 
   const basicCircleVariant = {
     created: {
-      scale: !isChorus ? [0.5, 3, 3] : [0.5, 5, 5],
+      scale: [0.5, 3, 3],
       borderColor,
       opacity: [1, 0, 0],
       transition: { duration: 4, times: [0, 0.25, 1] },
@@ -87,7 +87,7 @@ export const CircleWithText = ({
 
   const delayBasicVariant = {
     created: {
-      scale: !isChorus ? 3 : 5,
+      scale: 3,
       opacity: 0,
       transition: { duration: 1, delay: 0.1 },
     },

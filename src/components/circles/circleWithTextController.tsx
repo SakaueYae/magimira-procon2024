@@ -1,11 +1,11 @@
 import { useContext, useEffect, useRef, useState } from "react";
 import { createRoot } from "react-dom/client";
-import { CircleWithText } from "./CircleWithText";
+import { CircleWithText } from "./circleWithText";
 import { CirclesContext } from "../../context/circlesContext";
 
 type CircleWithTextControllerProps = {
   text: string;
-  phrase?: string;
+  isChorus?: boolean;
 };
 
 /** ランダム表示の場合
@@ -20,6 +20,7 @@ type CircleWithTextControllerProps = {
 
 export const CircleWithTextController = ({
   text,
+  isChorus,
 }: CircleWithTextControllerProps) => {
   const ref = useRef<HTMLDivElement>(null);
   const [position, setPosition] = useState<{
@@ -83,9 +84,10 @@ export const CircleWithTextController = ({
         x={position.x}
         y={position.y}
         text={text}
-        color={position.color}
+        // color={position.color}
         isMouseDown={isMouseDown.current}
         circles={circles}
+        isChorus={isChorus}
       />
     );
 

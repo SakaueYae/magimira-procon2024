@@ -1,11 +1,11 @@
 import { useEffect, useState } from "react";
 import styled from "styled-components";
-import { CircleController } from "./components/circles/CircleController";
-import { CircleWithTextController } from "./components/circles/CircleWithTextController";
+import { CircleController } from "./components/circles/circleController";
+import { CircleWithTextController } from "./components/circles/circleWithTextController";
 import { usePlayer } from "./components/hooks/usePlayer";
-import { Loading } from "./components/loading/Loading";
-import { SeekBar } from "./components/seekBar/SeekBar";
-import { PlayAndStopButton } from "./components/playAndStopButton/PlayAndStopButton";
+import { Loading } from "./components/loading/loading";
+import { SeekBar } from "./components/seekBar/seekBar";
+import { PlayAndStopButton } from "./components/playAndStopButton/playAndStopButton";
 import { AnimatePresence } from "framer-motion";
 import { CirclesContextProvider } from "./context/circlesContext";
 
@@ -13,7 +13,6 @@ import { CirclesContextProvider } from "./context/circlesContext";
  * やりたいこと
  * ・サイドバー実装
  * ・クリック（ドラッグ）した際のアニメーション
- * ・要素の重なりによる色の変化
  * ・文字が溶けるエフェクトその2
  * ・duration操作
  * ・曲選択
@@ -26,7 +25,6 @@ function App() {
   const [text, setText] = useState<string>("");
   const [isClicked, setIsClicked] = useState<boolean>(false);
   const [loaded, setLoaded] = useState<boolean>(false);
-  const [phrase, setPhrase] = useState<string>("");
   const [position, setPosition] = useState<number>(0);
   const [isChorus, setIsChorus] = useState<boolean>(false);
   const { media, player } = usePlayer();
@@ -36,7 +34,6 @@ function App() {
 
     const listener = {
       onTimeUpdate: (position: number) => {
-        if (position === 0) setPhrase("");
         setPosition(Math.trunc((position * 1000) / player.video.duration) / 10);
         const nowBeat = player.findBeat(position);
         if (!nowBeat) return;
@@ -52,7 +49,6 @@ function App() {
           c.animate = (now, u) => {
             if (u.startTime <= now + 400) {
               setText(u.toString());
-              setPhrase(u.parent.parent.toString() ?? "");
             }
           };
           c = c.next;
@@ -64,7 +60,6 @@ function App() {
     };
 
     player.addListener(listener);
-    // setPlayer(newPlayer);
 
     return () => {
       player.removeListener(listener);
@@ -98,7 +93,7 @@ function App() {
                * 1. 前のtextと同じphraseでない場合に座標を保持
                * 2. 前のtextと比較して同じphraseの場合、前の要素の付近に配置
                */}
-              <CircleWithTextController text={text} phrase={phrase} />
+              <CircleWithTextController text={text} isChorus={isChorus} />
             </CirclesContextProvider>
             <SeekBar position={position} onClick={seekBarOnClick} />
             <PlayAndStopButton

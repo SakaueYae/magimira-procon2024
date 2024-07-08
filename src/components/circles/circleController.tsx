@@ -1,5 +1,5 @@
 import { useEffect, useRef, useContext } from "react";
-import { Circle } from "./Circle";
+import { Circle } from "./circle";
 import { createRoot } from "react-dom/client";
 import { CirclesContext } from "../../context/circlesContext";
 
