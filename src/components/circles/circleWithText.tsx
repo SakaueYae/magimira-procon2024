@@ -26,7 +26,6 @@ export const CircleWithText = ({
   const ref = useRef<HTMLDivElement>(null);
   const controls = useAnimation();
 
-  /** ResizeObserverでの処理、半径の和で計算 */
   useEffect(() => {
     const element = ref.current;
     const observer = new ResizeObserver(() => {

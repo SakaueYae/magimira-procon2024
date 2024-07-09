@@ -8,16 +8,6 @@ type CircleWithTextControllerProps = {
   isChorus?: boolean;
 };
 
-/** ランダム表示の場合
- * 1. phraseが更新されるたびに縦か横をランダムに選択
- * 2. 縦が選択されたら上→下、横が選択されたら左→右にtextを表示
- * 3. 画面端に到達したら改行、ランダムな位置からまたスタート
- */
-
-/**
- * 消えるとき、文字が水に溶けるようなアニメーションにしたい
- */
-
 export const CircleWithTextController = ({
   text,
   isChorus,
@@ -26,7 +16,6 @@ export const CircleWithTextController = ({
   const [position, setPosition] = useState<{
     x: number;
     y: number;
-    color?: string;
   }>({
     x: 0,
     y: 0,
@@ -40,22 +29,6 @@ export const CircleWithTextController = ({
         x: e.clientX,
         y: e.clientY,
       });
-
-      const { clientX, clientY } = e;
-      const element = document.elementFromPoint(clientX, clientY);
-      if (
-        element?.attributes
-          .getNamedItem("style")
-          ?.value.includes("border-color")
-      ) {
-        const color = element?.attributes
-          .getNamedItem("style")
-          ?.value.split("border-color: ")[1]
-          .split(";")[0];
-        setPosition((prev) => ({ ...prev, color }));
-      } else {
-        setPosition((prev) => ({ ...prev, color: undefined }));
-      }
     });
 
     window.addEventListener("mousedown", () => {
@@ -84,7 +57,6 @@ export const CircleWithTextController = ({
         x={position.x}
         y={position.y}
         text={text}
-        // color={position.color}
         isMouseDown={isMouseDown.current}
         circles={circles}
         isChorus={isChorus}

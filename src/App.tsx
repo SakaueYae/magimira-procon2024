@@ -8,16 +8,8 @@ import { SeekBar } from "./components/seekBar/seekBar";
 import { PlayAndStopButton } from "./components/playAndStopButton/playAndStopButton";
 import { AnimatePresence } from "framer-motion";
 import { CirclesContextProvider } from "./context/circlesContext";
-import { selectMusic } from "./components/hooks/selectMusic";
-
-/**
- * やりたいこと
- * ・サイドバー実装
- * ・クリック（ドラッグ）した際のアニメーション
- * ・文字が溶けるエフェクトその2
- * ・duration操作
- * ・曲選択
- */
+import { MusicTitle, selectMusic } from "./components/hooks/selectMusic";
+import { NavigationBar } from "./components/navigationBar/navigationBar";
 
 function App() {
   const [isPlaying, setIsPlaying] = useState<boolean>(false);
@@ -27,6 +19,7 @@ function App() {
   const [loaded, setLoaded] = useState<boolean>(false);
   const [position, setPosition] = useState<number>(0);
   const [isChorus, setIsChorus] = useState<boolean>(false);
+  const [selectedMusic, setSelectedMusic] = useState<MusicTitle>("SUPERHERO");
   const { media, player } = usePlayer();
 
   useEffect(() => {
@@ -80,6 +73,17 @@ function App() {
       <AnimatePresence mode="wait">
         {isClicked ? (
           <>
+            <NavigationBar
+              selectedMusic={selectedMusic}
+              onIconClick={() => {
+                player?.requestPause();
+                setIsPlaying(false);
+              }}
+              onMusicClick={(music) => {
+                if (player) selectMusic(player, music);
+                setSelectedMusic(music);
+              }}
+            />
             <CirclesContextProvider>
               <CircleController beat={beat ?? 0} isChorus={isChorus} />
               <CircleWithTextController text={text} isChorus={isChorus} />
@@ -90,10 +94,10 @@ function App() {
               onClick={() => {
                 if (isPlaying) {
                   player?.requestPause();
-                  setIsPlaying(!isPlaying);
+                  setIsPlaying(false);
                 } else {
                   player?.requestPlay();
-                  setIsPlaying(!isPlaying);
+                  setIsPlaying(true);
                 }
               }}
             />
@@ -104,11 +108,12 @@ function App() {
             onClick={() => {
               setIsClicked(true);
               player?.requestPlay();
-              setIsPlaying(!isPlaying);
+              setIsPlaying(true);
             }}
             key="loadingScreen"
             onMusicClick={(music) => {
               if (player) selectMusic(player, music);
+              setSelectedMusic(music);
             }}
           />
         )}
@@ -122,7 +127,7 @@ export default App;
 const Container = styled.div`
   width: 100vw;
   height: 100vh;
-  background-color: #000;
+  background-color: rgb(0, 0, 0);
   position: relative;
   overflow: hidden;
 `;

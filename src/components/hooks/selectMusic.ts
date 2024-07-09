@@ -11,10 +11,6 @@ export type MusicTitle =
 const musicObj = {
   SUPERHERO: {
     songUrl: "https://piapro.jp/t/hZ35/20240130103028",
-    beatId: 4592293,
-    chordId: 2727635,
-    repetitiveSegmentId: 2824326,
-    // 歌詞タイミング訂正履歴: https://textalive.jp/lyrics/piapro.jp%2Ft%2FhZ35%2F20240130103028
     lyricId: 59415,
     lyricDiffId: 13962,
   },
