@@ -63,9 +63,12 @@ export const CircleWithTextController = ({
       />
     );
 
-    setTimeout(() => {
-      circle.remove();
-    }, 5000);
+    setTimeout(
+      () => {
+        circle.remove();
+      },
+      isMouseDown.current ? 5000 : 9000
+    );
   }, [text]);
 
   return <div ref={ref}></div>;

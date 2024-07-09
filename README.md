@@ -1,30 +1,43 @@
-# React + TypeScript + Vite
+# Lyripple
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## 概要
 
-Currently, two official plugins are available:
+初音ミク「マジカルミライ 2024」プログラミング・コンテスト
+応募作品
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+Lyripple は、音楽に合わせて歌詞（Lyric）が水の波紋（ripple）として出現するのを見て楽しむ作品となっています。ボカロ文化の地域や世代を超えた広がりを水の波紋に見立てて表現しました。
 
-## Expanding the ESLint configuration
+曲のビートに合わせてランダムな色の波紋が生成され、カーソルの動きに対応して歌詞が入っている波紋が生成されます。重なった波紋の色に対応して歌詞入りの波紋の色が変化するようになっています。ぜひカーソルをたくさん動かして色の変化や波紋の重なりを楽しんでいただけたらと思います！
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+## 環境構築
 
-- Configure the top-level `parserOptions` property like this:
+Node.js がインストールされている状態で以下のコマンドを行ってください。
 
-```js
-export default {
-  // other rules...
-  parserOptions: {
-    ecmaVersion: 'latest',
-    sourceType: 'module',
-    project: ['./tsconfig.json', './tsconfig.node.json'],
-    tsconfigRootDir: __dirname,
-  },
-}
+### パッケージインストール
+
+```bash
+$ npm install
 ```
 
-- Replace `plugin:@typescript-eslint/recommended` to `plugin:@typescript-eslint/recommended-type-checked` or `plugin:@typescript-eslint/strict-type-checked`
-- Optionally add `plugin:@typescript-eslint/stylistic-type-checked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and add `plugin:react/recommended` & `plugin:react/jsx-runtime` to the `extends` list
+### ローカルサーバー立ち上げ
+
+```bash
+$ npm run dev
+```
+
+### ビルド
+
+```bash
+$ npm run build
+```
+
+## 作品について
+
+- ランダムに生成される波紋には色がついていますが、カーソルから生成される波紋はすべて白色なので、カーソルを色付きの円に重ねることでさまざまな色の波紋を作ることができます。
+- サビに入ると色付きの波紋が大きくなり、より波紋と色の重なりを楽しむことが来ます。
+- 波紋はすぐに消えますが、文字は水に溶けるようにふわっと消えます。
+- カーソル押しっぱなしで文字が溶けるアニメーションが少しゆっくりになり、波紋が二重になります。曲のイメージやテンポに合わせて使い分ける楽しみ方もできます。
+
+## 動作環境
+
+PC での動作を前提としています。

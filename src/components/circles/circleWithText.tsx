@@ -70,7 +70,7 @@ export const CircleWithText = ({
       scale: [0.5, 3, 3],
       borderColor,
       opacity: [1, 0, 0],
-      transition: { duration: 4, times: [0, 0.25, 1] },
+      transition: { duration: !isMouseDown ? 4 : 8, times: [0, 0.25, 1] },
     },
   };
 
