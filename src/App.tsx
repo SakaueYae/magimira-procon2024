@@ -20,7 +20,6 @@ import { selectMusic } from "./components/hooks/selectMusic";
  */
 
 function App() {
-  // const [player, setPlayer] = useState<Player>();
   const [isPlaying, setIsPlaying] = useState<boolean>(false);
   const [beat, setBeat] = useState<number>();
   const [text, setText] = useState<string>("");
@@ -35,7 +34,10 @@ function App() {
 
     const listener = {
       onTimeUpdate: (position: number) => {
-        setPosition(Math.trunc((position * 1000) / player.video.duration) / 10);
+        const nowPosition =
+          Math.trunc((position * 1000) / player.video.duration) / 10;
+        if (nowPosition === 100) setIsPlaying(false);
+        setPosition(nowPosition);
         const nowBeat = player.findBeat(position);
         if (!nowBeat) return;
         setBeat(nowBeat.progress(position));
@@ -84,6 +86,7 @@ function App() {
             </CirclesContextProvider>
             <SeekBar position={position} onClick={seekBarOnClick} />
             <PlayAndStopButton
+              isPlaying={isPlaying}
               onClick={() => {
                 if (isPlaying) {
                   player?.requestPause();

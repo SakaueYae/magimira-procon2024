@@ -1,20 +1,28 @@
 import { motion, useAnimationControls } from "framer-motion";
-import { useState } from "react";
+import { useEffect } from "react";
 import styled from "styled-components";
 
 type PlayAndStopButtonProps = {
+  isPlaying: boolean;
   onClick: () => void;
 };
 
-export const PlayAndStopButton = ({ onClick }: PlayAndStopButtonProps) => {
+export const PlayAndStopButton = ({
+  isPlaying,
+  onClick,
+}: PlayAndStopButtonProps) => {
   const controls = useAnimationControls();
-  const [isPlaying, setIsPlaying] = useState<boolean>(true);
   const handleTap = () => {
     onClick();
     if (isPlaying) controls.start("stop");
     else controls.start("play");
-    setIsPlaying(!isPlaying);
   };
+
+  useEffect(() => {
+    if (isPlaying) controls.start("play");
+    else controls.start("stop");
+  }, [controls, isPlaying]);
+
   const variants = {
     play: {
       clipPath: "polygon(0 0, 100% 0, 100% 100%, 0 100%)",
