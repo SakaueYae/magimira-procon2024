@@ -40,7 +40,7 @@ export const PlayAndStopButton = ({ onClick }: PlayAndStopButtonProps) => {
 
 const Container = styled(motion.button)`
   border-radius: 50%;
-  border: 2px solid #fff;
+  border: 2px solid rgb(255, 255, 255);
   width: 100px;
   height: 100px;
   position: absolute;
@@ -55,5 +55,5 @@ const Container = styled(motion.button)`
 const ButtonIcon = styled(motion.div)`
   width: 30px;
   height: 30px;
-  background-color: #fff;
+  background-color: rgb(255, 255, 255);
 `;

@@ -1,7 +1,7 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 import styled from "styled-components";
 import { BasicCircle } from "../circles/basicCircle";
-import { motion } from "framer-motion";
+import { motion, useAnimation } from "framer-motion";
 import { createRoot } from "react-dom/client";
 
 type MusicCircleProps = {
@@ -11,6 +11,7 @@ type MusicCircleProps = {
   onClick: () => void;
   title: string;
   title2?: string;
+  isActivated: boolean;
 };
 
 export const MusicCircle = ({
@@ -20,9 +21,13 @@ export const MusicCircle = ({
   onClick,
   title,
   title2,
+  isActivated,
 }: MusicCircleProps) => {
   const ref = useRef<HTMLDivElement>(null);
-  const [currentInterval, setCurrentInterval] = useState<number | null>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
+  const currentInterval = useRef<number | null>(null);
+  const controls = useAnimation();
+  const isFirstHover = useRef<boolean>(true);
 
   const generateCircles = () => {
     if (ref.current) {
@@ -33,12 +38,13 @@ export const MusicCircle = ({
         const root = createRoot(circle);
         root.render(
           <BasicCircle
+            initial={{ scale: 1, opacity: 1 }}
             animate={{
-              scale: 3,
+              scale: 1.5,
               opacity: 0,
             }}
             transition={{
-              duration: 3,
+              duration: 1.5,
             }}
             color={color}
             width={250}
@@ -48,23 +54,55 @@ export const MusicCircle = ({
         setTimeout(() => {
           circle.remove();
         }, 3000);
-      }, 1000);
-      setCurrentInterval(interval);
+      }, 2000);
+      currentInterval.current = interval;
     } else {
-      if (currentInterval) clearInterval(currentInterval);
+      if (currentInterval.current) clearInterval(currentInterval.current);
     }
   };
+
+  useEffect(() => {
+    if (isActivated) {
+      controls.start({
+        scale: 1.5,
+        textShadow: `0 0 10px ${color},0 0 15px ${color}`,
+        transition: { duration: 1 },
+      });
+    } else {
+      controls.start({
+        scale: 1,
+        textShadow: "none",
+        transition: { duration: 1 },
+      });
+    }
+  }, [color, controls, isActivated]);
+
+  useEffect(() => {
+    if (!containerRef.current) return;
+    containerRef.current.addEventListener("mouseover", () => {
+      if (isFirstHover.current) {
+        generateCircles();
+        isFirstHover.current = false;
+      }
+    });
+
+    containerRef.current.addEventListener("mouseleave", () => {
+      if (currentInterval.current) clearInterval(currentInterval.current);
+      isFirstHover.current = true;
+    });
+  }, []);
 
   return (
     <Container
       x={x}
       y={y}
-      onClick={onClick}
-      color={color}
-      onHoverStart={() => generateCircles()}
-      onHoverEnd={() => {
-        if (currentInterval) clearInterval(currentInterval);
+      onClick={() => {
+        if (currentInterval.current) clearInterval(currentInterval.current);
+        onClick();
       }}
+      color={color}
+      animate={controls}
+      ref={containerRef}
     >
       <CirclesContainer>
         <Circle color={color} initial={{ scale: 1, opacity: 1 }} />
@@ -90,11 +128,11 @@ const Container = styled(motion.div)<{ x?: number; y?: number; color: string }>`
 `;
 
 const Circle = styled(BasicCircle)<{
-  color?: string;
+  color: string;
 }>`
   width: 250px;
   height: 250px;
-  border-color: ${(props) => props.color || "#fff"};
+  border-color: ${(props) => props.color};
   position: absolute;
   top: 0;
   left: 0;
