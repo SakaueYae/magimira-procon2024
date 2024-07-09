@@ -13,21 +13,21 @@ export const HamburgerIcon = ({ onClick }: HamburgerIconProps) => {
           open: { rotate: -45, y: 10 },
           closed: { rotate: 0, y: 0 },
         }}
-        transition={{ duration: 0.2 }}
+        transition={{ duration: 0.5 }}
       />
       <Line
         variants={{
           open: { opacity: 0 },
           closed: { opacity: 1 },
         }}
-        transition={{ duration: 0.2 }}
+        transition={{ duration: 0.5 }}
       />
       <Line
         variants={{
           open: { rotate: 45, y: -10 },
           closed: { rotate: 0, y: 0 },
         }}
-        transition={{ duration: 0.2 }}
+        transition={{ duration: 0.5 }}
       />
     </Container>
   );

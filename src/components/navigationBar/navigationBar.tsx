@@ -23,6 +23,7 @@ export const NavigationBar = ({
       display: "none",
       backgroundColor: "rgba(255, 255, 255, 0)",
       transition: {
+        duration: 0.5,
         y: { stiffness: 1000 },
       },
     },
@@ -31,6 +32,7 @@ export const NavigationBar = ({
       display: "block",
       backgroundColor: "rgba(255, 255, 255, 0.2)",
       transition: {
+        duration: 0.5,
         y: { stiffness: 1000 },
       },
     },

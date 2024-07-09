@@ -90,6 +90,7 @@ function App() {
             </CirclesContextProvider>
             <SeekBar position={position} onClick={seekBarOnClick} />
             <PlayAndStopButton
+              music={selectedMusic}
               isPlaying={isPlaying}
               onClick={() => {
                 if (isPlaying) {
