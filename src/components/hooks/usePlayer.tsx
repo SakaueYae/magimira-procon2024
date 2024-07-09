@@ -18,18 +18,6 @@ export const usePlayer = () => {
       },
     });
 
-    newPlayer.createFromSongUrl("https://piapro.jp/t/xEA7/20240202002556", {
-      video: {
-        // 音楽地図訂正履歴
-        // beatId: 4592293,
-        // chordId: 2727635,
-        // repetitiveSegmentId: 2824326,
-        // 歌詞タイミング訂正履歴: https://textalive.jp/lyrics/piapro.jp%2Ft%2FhZ35%2F20240130103028
-        lyricId: 59420,
-        lyricDiffId: 13967,
-      },
-    });
-
     const listener = {
       onPlay: () => console.log("play"),
       onPause: () => console.log("pause"),

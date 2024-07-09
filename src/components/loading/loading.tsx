@@ -1,16 +1,16 @@
 import { AnimatePresence, motion } from "framer-motion";
-import { useEffect, useRef, useState } from "react";
-import { createRoot } from "react-dom/client";
 import styled from "styled-components";
+import { BasicCircle } from "../circles/basicCircle";
+import { MusicTitle } from "../hooks/selectMusic";
+import { MusicCircle as Music } from "./musicCircle";
 
 type LoadingProps = {
   isLoading: boolean;
   onClick: () => void;
+  onMusicClick: (music: MusicTitle) => void;
 };
 
-export const Loading = ({ isLoading, onClick }: LoadingProps) => {
-  const ref = useRef<HTMLDivElement>(null);
-  const [currentInterval, setCurrentInterval] = useState<number>(0);
+export const Loading = ({ isLoading, onClick, onMusicClick }: LoadingProps) => {
   const basicCircleVariant = {
     loading: {
       borderColor: [
@@ -32,82 +32,87 @@ export const Loading = ({ isLoading, onClick }: LoadingProps) => {
       },
     },
   };
-  const circleVariant = {
-    loading: {
-      scale: [1, 5],
-      borderColor: ["rgba(255, 255, 255, 1)", "rgba(255, 255, 255, 0)"],
-    },
-  };
-
-  useEffect(() => {
-    if (ref.current && isLoading) {
-      const interval = setInterval(() => {
-        const circle = document.createElement("div");
-        if (!ref.current) return;
-        ref.current.appendChild(circle);
-        const root = createRoot(circle);
-
-        root.render(
-          <Circle
-            animate="loading"
-            variants={circleVariant}
-            transition={{
-              duration: 8,
-            }}
-          />
-        );
-
-        setTimeout(() => {
-          circle.remove();
-        }, 10000);
-      }, 2000);
-
-      setCurrentInterval(interval);
-    } else {
-      clearInterval(currentInterval);
-    }
-  }, [isLoading]);
-
-  /**
-   * durationで指定した秒数でopacityが0.3→1と繰り返す
-   * ロード中：真ん中の丸から1秒おきに波紋が広がるアニメーション、5秒後に消える
-   * ロードが終わったらStart表示
-   */
 
   return (
     <Container>
-      <BaseCircle
-        animate="loading"
-        variants={basicCircleVariant}
-        onClick={onClick}
-        isLoading={isLoading}
-        exit={"clicked"}
-      >
-        <CircleContainer ref={ref}></CircleContainer>
-        <AnimatePresence mode="wait">
-          {isLoading ? (
-            <Text
-              initial={{ opacity: 0, filter: "blur(10px)" }}
-              animate={{ opacity: 1, filter: "blur(0px)" }}
-              exit={{ opacity: 0, filter: "blur(10px)" }}
-              transition={{ duration: 0.5 }}
-              key="loading"
-            >
-              Loading
-            </Text>
-          ) : (
-            <Text
-              initial={{ opacity: 0, filter: "blur(10px)" }}
-              animate={{ opacity: 1, filter: "blur(0px)" }}
-              exit={{ opacity: 0, filter: "blur(10px)" }}
-              transition={{ duration: 0.5 }}
-              key="loaded"
-            >
-              Play
-            </Text>
-          )}
-        </AnimatePresence>
-      </BaseCircle>
+      <CirclesContainer>
+        <Music
+          y={-300}
+          color="rgb(255, 239, 97)"
+          onClick={() => onMusicClick("SUPERHERO")}
+          title="SUPERHERO"
+        />
+        <Music
+          x={Math.cos(30 * (Math.PI / 180)) * 300}
+          y={Math.sin(30 * (Math.PI / 180)) * -300}
+          color="rgb(126, 87, 255)"
+          onClick={() => onMusicClick("いつか君と話したミライは")}
+          title="いつか君と"
+          title2="話したミライは"
+        />
+        <Music
+          x={Math.cos(-30 * (Math.PI / 180)) * 300}
+          y={Math.sin(-30 * (Math.PI / 180)) * -300}
+          color="rgb(139, 252, 245)"
+          onClick={() => onMusicClick("フューチャーノーツ")}
+          title="フューチャーノーツ"
+        />
+        <Music
+          y={250}
+          color="rgb(250, 205, 245)"
+          onClick={() => onMusicClick("未来交響曲")}
+          title="未来交響曲"
+        />
+        <Music
+          x={Math.cos(30 * (Math.PI / 180)) * -300 - 50}
+          y={Math.sin(30 * (Math.PI / 180)) * 300}
+          color="rgb(212, 255, 189)"
+          onClick={() => onMusicClick("リアリティ")}
+          title="リアリティ"
+        />
+        <Music
+          x={Math.cos(-30 * (Math.PI / 180)) * -300 - 50}
+          y={Math.sin(-30 * (Math.PI / 180)) * 300}
+          color="rgb(145, 3, 3)"
+          onClick={() => onMusicClick("TheMarks")}
+          title="The Marks"
+        />
+        <CenterCircle
+          animate="loading"
+          variants={basicCircleVariant}
+          onClick={onClick}
+          isLoading={isLoading}
+          exit={"clicked"}
+          width={250}
+          height={250}
+        >
+          {/* <CircleContainer ref={ref}></CircleContainer> */}
+          <AnimatePresence mode="wait">
+            {isLoading ? (
+              <Text
+                initial={{ opacity: 0, filter: "blur(10px)" }}
+                animate={{ opacity: 1, filter: "blur(0px)" }}
+                exit={{ opacity: 0, filter: "blur(10px)" }}
+                transition={{ duration: 0.5 }}
+                key="loading"
+              >
+                曲を <br />
+                選択してください
+              </Text>
+            ) : (
+              <Text
+                initial={{ opacity: 0, filter: "blur(10px)" }}
+                animate={{ opacity: 1, filter: "blur(0px)" }}
+                exit={{ opacity: 0, filter: "blur(10px)" }}
+                transition={{ duration: 0.5 }}
+                key="loaded"
+              >
+                Play
+              </Text>
+            )}
+          </AnimatePresence>
+        </CenterCircle>
+      </CirclesContainer>
     </Container>
   );
 };
@@ -123,51 +128,24 @@ const Container = styled.div`
 
 const Text = styled(motion.p)`
   color: #fff;
-  font-size: 30px;
+  font-size: 25px;
   font-family: serif;
   margin: 0;
+  text-align: center;
 `;
 
-const BaseCircle = styled(motion.div)<{ isLoading: boolean }>`
-  width: 300px;
-  height: 300px;
-  border-radius: 50%;
-  border: 1px solid #fff;
+const CenterCircle = styled(BasicCircle)<{ isLoading: boolean }>`
+  cursor: ${(props) => (props.isLoading ? "default" : "pointer")};
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
+
+const CirclesContainer = styled.div`
+  width: 200px;
+  height: 200px;
   display: flex;
   justify-content: center;
   align-items: center;
   position: relative;
-  cursor: ${(props) => (props.isLoading ? "default" : "pointer")};
-
-  @media only screen and (max-width: 767px) {
-    width: 150px;
-    height: 150px;
-  }
-`;
-
-const Circle = styled(motion.div)`
-  width: 300px;
-  height: 300px;
-  border-radius: 50%;
-  border: 1px solid #ffffff;
-  position: absolute;
-  top: 0;
-  left: 0;
-
-  @media only screen and (max-width: 767px) {
-    width: 150px;
-    height: 150px;
-  }
-`;
-
-const CircleContainer = styled.div`
-  width: 300px;
-  height: 300px;
-  position: absolute;
-  top: 0;
-
-  @media only screen and (max-width: 767px) {
-    width: 150px;
-    height: 150px;
-  }
 `;
